@@ -1,0 +1,88 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:KimmysCredentialing.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dg="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.DataGrid"
+        mc:Ignorable="d"
+        d:DesignWidth="1000"
+        d:DesignHeight="700"
+        x:Class="KimmysCredentialing.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="Kimmy's Credentialing"
+        Width="1000"
+        Height="700">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*" Margin="20">
+        <TextBlock Text="Provider Manager"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+        <Grid Grid.Row="1" ColumnDefinitions="2*,3*" ColumnSpacing="20">
+
+            <Border Grid.Column="0"
+                    BorderBrush="Gray"
+                    BorderThickness="1"
+                    Padding="15">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Add Provider"
+                               FontSize="20"
+                               FontWeight="SemiBold"/>
+
+                    <TextBlock Text="Name"/>
+                    <TextBox Text="{Binding Name}" Watermark="Enter provider name"/>
+
+                    <TextBlock Text="NPI"/>
+                    <TextBox Text="{Binding Npi}" Watermark="Enter NPI"/>
+
+                    <TextBlock Text="Specialty"/>
+                    <TextBox Text="{Binding Specialty}" Watermark="Enter specialty"/>
+
+                    <TextBlock Text="Email"/>
+                    <TextBox Text="{Binding Email}" Watermark="Enter email"/>
+
+                    <TextBlock Text="Phone"/>
+                    <TextBox Text="{Binding Phone}" Watermark="Enter phone"/>
+
+                    <Button Content="Add Provider"
+                            Command="{Binding AddProviderCommand}"
+                            Width="140"
+                            Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1"
+                    BorderBrush="Gray"
+                    BorderThickness="1"
+                    Padding="15">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Providers"
+                               FontSize="20"
+                               FontWeight="SemiBold"/>
+
+                    <ListBox ItemsSource="{Binding Providers}" Height="500">
+    <ListBox.ItemTemplate>
+        <DataTemplate>
+            <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="8">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding NPI}"/>
+                    <TextBlock Text="{Binding Specialty}"/>
+                    <TextBlock Text="{Binding Email}"/>
+                    <TextBlock Text="{Binding Phone}"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </ListBox.ItemTemplate>
+</ListBox>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+    </Grid>
+</Window>
