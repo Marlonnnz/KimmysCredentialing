@@ -23,66 +23,125 @@
                    FontWeight="Bold"
                    Margin="0,0,0,20"/>
 
-        <Grid Grid.Row="1" ColumnDefinitions="2*,3*" ColumnSpacing="20">
+        <Grid Grid.Row="1" ColumnDefinitions="2*,2*,3*" ColumnSpacing="20">
 
-            <Border Grid.Column="0"
-                    BorderBrush="Gray"
-                    BorderThickness="1"
-                    Padding="15">
-                <StackPanel Spacing="10">
-                    <TextBlock Text="Add Provider"
-                               FontSize="20"
-                               FontWeight="SemiBold"/>
+    <Border Grid.Column="0"
+            BorderBrush="Gray"
+            BorderThickness="1"
+            Padding="15">
+        <StackPanel Spacing="10">
+            <TextBlock Text="Add Provider"
+                       FontSize="20"
+                       FontWeight="SemiBold"/>
 
-                    <TextBlock Text="Name"/>
-                    <TextBox Text="{Binding Name}" Watermark="Enter provider name"/>
+            <TextBlock Text="Name"/>
+            <TextBox Text="{Binding Name}" Watermark="Enter provider name"/>
 
-                    <TextBlock Text="NPI"/>
-                    <TextBox Text="{Binding Npi}" Watermark="Enter NPI"/>
+            <TextBlock Text="NPI"/>
+            <TextBox Text="{Binding Npi}" Watermark="Enter NPI"/>
 
-                    <TextBlock Text="Specialty"/>
-                    <TextBox Text="{Binding Specialty}" Watermark="Enter specialty"/>
+            <TextBlock Text="Specialty"/>
+            <TextBox Text="{Binding Specialty}" Watermark="Enter specialty"/>
 
-                    <TextBlock Text="Email"/>
-                    <TextBox Text="{Binding Email}" Watermark="Enter email"/>
+            <TextBlock Text="Email"/>
+            <TextBox Text="{Binding Email}" Watermark="Enter email"/>
 
-                    <TextBlock Text="Phone"/>
-                    <TextBox Text="{Binding Phone}" Watermark="Enter phone"/>
+            <TextBlock Text="Phone"/>
+            <TextBox Text="{Binding Phone}" Watermark="Enter phone"/>
 
-                    <Button Content="Add Provider"
-                            Command="{Binding AddProviderCommand}"
-                            Width="140"
-                            Margin="0,10,0,0"/>
-                </StackPanel>
-            </Border>
+            <Button Content="Add Provider"
+                    Command="{Binding AddProviderCommand}"
+                    Width="140"
+                    Margin="0,10,0,0"/>
+        </StackPanel>
+    </Border>
 
-            <Border Grid.Column="1"
-                    BorderBrush="Gray"
-                    BorderThickness="1"
-                    Padding="15">
-                <StackPanel Spacing="10">
-                    <TextBlock Text="Providers"
-                               FontSize="20"
-                               FontWeight="SemiBold"/>
+    <Border Grid.Column="1"
+            BorderBrush="Gray"
+            BorderThickness="1"
+            Padding="15">
+        <StackPanel Spacing="10">
+            <TextBlock Text="Providers"
+                       FontSize="20"
+                       FontWeight="SemiBold"/>
 
-                    <ListBox ItemsSource="{Binding Providers}" Height="500">
-    <ListBox.ItemTemplate>
-        <DataTemplate>
-            <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="8">
-                <StackPanel Spacing="4">
-                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding NPI}"/>
-                    <TextBlock Text="{Binding Specialty}"/>
-                    <TextBlock Text="{Binding Email}"/>
-                    <TextBlock Text="{Binding Phone}"/>
-                </StackPanel>
-            </Border>
-        </DataTemplate>
-    </ListBox.ItemTemplate>
-</ListBox>
-                </StackPanel>
-            </Border>
+            <ListBox ItemsSource="{Binding Providers}"
+                     SelectedItem="{Binding SelectedProvider}"
+                     Height="500">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="8">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding NPI}"/>
+                                <TextBlock Text="{Binding Specialty}"/>
+                                <TextBlock Text="{Binding Email}"/>
+                                <TextBlock Text="{Binding Phone}"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Border>
 
-        </Grid>
+    <Border Grid.Column="2"
+            BorderBrush="Gray"
+            BorderThickness="1"
+            Padding="15">
+        <StackPanel Spacing="10">
+            <TextBlock Text="Credentials"
+                       FontSize="20"
+                       FontWeight="SemiBold"/>
+
+            <TextBlock Text="{Binding SelectedProvider.Name, FallbackValue='Select a provider'}"
+                       FontWeight="Bold"
+                       FontSize="16"/>
+
+            <TextBlock Text="Credential Name"/>
+            <TextBox Text="{Binding CredentialName}" Watermark="Enter credential name"/>
+
+            <TextBlock Text="Issue Date"/>
+            <DatePicker SelectedDate="{Binding CredentialIssueDate}"/>
+
+            <TextBlock Text="Expiration Date"/>
+            <DatePicker SelectedDate="{Binding CredentialExpirationDate}"/>
+
+            <TextBlock Text="Notes"/>
+            <TextBox Text="{Binding CredentialNotes}"
+                     Watermark="Enter notes"
+                     AcceptsReturn="True"
+                     Height="80"/>
+
+            <Button Content="Add Credential"
+                    Command="{Binding AddCredentialCommand}"
+                    Width="150"
+                    Margin="0,10,0,10"/>
+
+            <TextBlock Text="Saved Credentials"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Margin="0,10,0,0"/>
+
+            <ListBox ItemsSource="{Binding Credentials}" Height="300">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="LightGray"
+                                BorderThickness="0,0,0,1"
+                                Padding="8">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding IssueDate, StringFormat='Issue: {0:d}'}"/>
+                                <TextBlock Text="{Binding ExpirationDate, StringFormat='Expires: {0:d}'}"/>
+                                <TextBlock Text="{Binding Notes}"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Border>
+
+</Grid>
     </Grid>
 </Window>
