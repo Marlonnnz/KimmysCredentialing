@@ -40,5 +40,22 @@ namespace KimmysCredentialing.Services
             db.Credentials.Remove(credential);
             db.SaveChanges();
         }
+
+        public void UpdateCredential(Credential updatedCredential)
+        {
+            using var db = new AppDbContext();
+
+            var exisiting = db.Credentials.FirstOrDefault(c => c.CredentialId == updatedCredential.CredentialId);
+
+            if (exisiting is null)
+                return;
+
+            exisiting.Name = updatedCredential.Name;
+            exisiting.IssueDate = updatedCredential.IssueDate;
+            exisiting.ExpirationDate = updatedCredential.ExpirationDate;
+            exisiting.Notes = updatedCredential.Notes;
+
+            db.SaveChanges();
+        }
     }
 }

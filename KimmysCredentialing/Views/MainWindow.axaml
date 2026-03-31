@@ -79,6 +79,12 @@
                     Command="{Binding AddProviderCommand}"
                     Width="140"
                     Margin="0,10,0,0"/>
+            <Button Content="Update Provider"
+                    Command="{Binding UpdateProviderCommand}"
+                    Width="140" />
+            <Button Content="Delete Selected Provider"
+                    Command="{Binding DeleteProviderCommand}"
+                    Width="180" />
         </StackPanel>
     </Border>
 
@@ -90,7 +96,9 @@
             <TextBlock Text="Providers"
                        FontSize="20"
                        FontWeight="SemiBold"/>
-
+            <TextBlock Text="Search Providers" />
+            <TextBox Text="{Binding ProviderSearchText}"
+                     Watermark="Search by Name, NPI, specialty, email or phone" />
             <ListBox ItemsSource="{Binding Providers}"
                      SelectedItem="{Binding SelectedProvider}"
                      Height="500">
@@ -143,6 +151,10 @@
                     Command="{Binding AddCredentialCommand}"
                     Width="150"
                     Margin="0,10,0,10"/>
+
+            <Button Content="Update Credential"
+                    Command="{Binding UpdateCredentialCommand}"
+                    Width="150" />
 
             <Button Content="Delete Credential"
                     Command="{Binding DeleteCredentialCommand}"
