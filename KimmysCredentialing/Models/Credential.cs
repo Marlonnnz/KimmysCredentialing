@@ -15,5 +15,27 @@ namespace KimmysCredentialing.Models
         public string FilePath { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
         public Provider? Provider { get; set; }
+        public string ProviderDisplayName => Provider?.Name ?? "Unkown Provider";
+
+        public string Status
+        {
+            get
+            {
+                if (!ExpirationDate.HasValue)
+                    return "No Expiration Date";
+
+                var today = DateTime.Today;
+
+                if(ExpirationDate.Value.Date < today)
+                {
+                    return "Expired";
+                }
+
+                if (ExpirationDate.Value.Date <= today.AddDays(30))
+                    return "Expiring Soon";
+
+                return "Active";
+            }
+        }
     }
 }

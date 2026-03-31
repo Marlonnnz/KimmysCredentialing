@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using KimmysCredentialing.Data;
 using KimmysCredentialing.Models;
 using Avalonia.Data.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace KimmysCredentialing.Services
 {
@@ -13,6 +14,7 @@ namespace KimmysCredentialing.Services
             using var db = new AppDbContext();
 
             return db.Credentials
+                .Include(c => c.Provider)
                 .Where(c => c.ProviderId == providerId)
                 .OrderBy(c => c.ExpirationDate)
                 .ToList();
@@ -23,6 +25,19 @@ namespace KimmysCredentialing.Services
             using var db = new AppDbContext();
 
             db.Credentials.Add(credential);
+            db.SaveChanges();
+        }
+
+        public void DeleteCredential(int credentialId)
+        {
+            using var db = new AppDbContext();
+
+            var credential = db.Credentials.FirstOrDefault(c => c.CredentialId == credentialId);
+
+            if (credential is null)
+                return;
+
+            db.Credentials.Remove(credential);
             db.SaveChanges();
         }
     }

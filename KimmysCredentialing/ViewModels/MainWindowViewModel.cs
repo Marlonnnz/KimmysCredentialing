@@ -32,6 +32,9 @@ namespace KimmysCredentialing.ViewModels;
         private Provider? selectedProvider;
 
         [ObservableProperty]
+        private Credential? selectedCredential;
+
+        [ObservableProperty]
         private string credentialName = string.Empty;
 
         [ObservableProperty]
@@ -39,6 +42,8 @@ namespace KimmysCredentialing.ViewModels;
 
         [ObservableProperty]
         private DateTimeOffset? credentialExpirationDate;
+
+        public ObservableCollection<Credential> ExpiringSoonCredentials { get; } = new();
 
         [ObservableProperty]
         private string credentialNotes = string.Empty;
@@ -52,7 +57,8 @@ namespace KimmysCredentialing.ViewModels;
             _credentialService = new CredentialService();
 
             LoadProviders();
-        }
+            LoadExpiringSoonCredentials();
+    }
 
         partial void OnSelectedProviderChanged(Provider? value)
         {
@@ -78,7 +84,8 @@ namespace KimmysCredentialing.ViewModels;
 
             ClearForm();
             LoadProviders();
-        }
+            LoadExpiringSoonCredentials();
+    }
 
         [RelayCommand]
         private void AddCredential()
@@ -101,6 +108,18 @@ namespace KimmysCredentialing.ViewModels;
         _credentialService.AddCredential(credential);
         ClearCredentialForm();
         LoadCredentials();
+    }
+
+        [RelayCommand]    
+        private void DeleteCredential()
+    {
+        if (selectedCredential is null)
+            return;
+
+        _credentialService.DeleteCredential(selectedCredential.CredentialId);
+        selectedCredential = null;
+        LoadCredentials();
+        LoadExpiringSoonCredentials();
     }
 
         private void LoadProviders()
@@ -140,12 +159,35 @@ namespace KimmysCredentialing.ViewModels;
 
     }
 
-    private void ClearCredentialForm()
+        private void ClearCredentialForm()
     {
         credentialName = string.Empty;
         credentialIssueDate = null;
         credentialExpirationDate = null;
         credentialNotes = string.Empty;
+    }
+
+    private void LoadExpiringSoonCredentials()
+    {
+        ExpiringSoonCredentials.Clear();
+
+        var today = DateTime.Today;
+        var soon = today.AddDays(30);
+
+        foreach(var provider in Providers)
+        {
+            var credentials = _credentialService.GetCredentialsByProviderId(provider.ProviderId);
+
+            foreach (var credential in credentials)
+            {
+                if (credential.ExpirationDate.HasValue &&
+                    credential.ExpirationDate.Value >= today &&
+                    credential.ExpirationDate.Value.Date <= soon)
+                {
+                    ExpiringSoonCredentials.Add(credential);
+                }
+            }
+        }
     }
     }
 
