@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -37,7 +38,19 @@ namespace KimmysCredentialing.ViewModels;
 
         [ObservableProperty]
         private string credentialName = string.Empty;
-        
+
+        [ObservableProperty]
+        private string selectedCredentialStatusFilter = "All";
+
+        public List<string> CredentialStatusFilters { get; } = new()
+        {
+            "All",
+            "Active",
+            "Expired",
+            "Expiring Soon",
+            "No Expiration Date"
+        };
+
         [ObservableProperty]
         private string providerSearchText = string.Empty;
 
@@ -91,6 +104,10 @@ namespace KimmysCredentialing.ViewModels;
             CredentialNotes = value.Notes;
         }
 
+        partial void OnSelectedCredentialStatusFilterChanged(string value)
+        {
+            LoadCredentials();
+        }
         partial void OnProviderSearchTextChanged(string value)
         {
             LoadProviders();
@@ -237,20 +254,28 @@ namespace KimmysCredentialing.ViewModels;
         }
 
         private void LoadCredentials()
-    {
-        Credentials.Clear();
-
-        if (SelectedProvider is null)
-            return;
-
-        var credentials = _credentialService.GetCredentialsByProviderId(SelectedProvider.ProviderId);
-        
-        foreach (var credential in credentials)
         {
-            Credentials.Add(credential);
-        }
+            Credentials.Clear();
 
-    }
+            if (SelectedProvider is null)
+                return;
+
+            var credentials = _credentialService.GetCredentialsByProviderId(SelectedProvider.ProviderId);
+            
+            if(!string.IsNullOrWhiteSpace(SelectedCredentialStatusFilter) &&
+                selectedCredentialStatusFilter != "All")
+            {
+                credentials = credentials
+                    .Where(c => c.Status == selectedCredentialStatusFilter)
+                    .ToList();
+            }
+
+            foreach (var credential in credentials)
+            {
+                Credentials.Add(credential);
+            }
+
+        }
 
         private void ClearCredentialForm()
     {
