@@ -52,6 +52,9 @@ namespace KimmysCredentialing.ViewModels;
         };
 
         [ObservableProperty]
+        private string credentialFilePath = string.Empty;
+
+        [ObservableProperty]
         private string providerSearchText = string.Empty;
 
         [ObservableProperty]
@@ -100,6 +103,7 @@ namespace KimmysCredentialing.ViewModels;
             CredentialIssueDate = value.IssueDate.HasValue
                 ? new DateTimeOffset(value.ExpirationDate.Value)
                 : null;
+            CredentialFilePath = value.FilePath;
 
             CredentialNotes = value.Notes;
         }
@@ -182,6 +186,7 @@ namespace KimmysCredentialing.ViewModels;
                 Name = credentialName,
                 IssueDate = credentialIssueDate?.DateTime,
                 ExpirationDate = credentialExpirationDate?.DateTime,
+                FilePath = credentialFilePath,
                 Notes = CredentialNotes
             };
 
@@ -198,6 +203,7 @@ namespace KimmysCredentialing.ViewModels;
             SelectedCredential.Name = CredentialName;
             SelectedCredential.IssueDate = CredentialIssueDate?.DateTime;
             SelectedCredential.ExpirationDate = CredentialExpirationDate?.DateTime;
+            SelectedCredential.FilePath = CredentialFilePath;
             SelectedCredential.Notes = CredentialNotes;
 
             _credentialService.UpdateCredential(SelectedCredential);
@@ -282,6 +288,7 @@ namespace KimmysCredentialing.ViewModels;
         credentialName = string.Empty;
         credentialIssueDate = null;
         credentialExpirationDate = null;
+        credentialFilePath = string.Empty;
         credentialNotes = string.Empty;
     }
 

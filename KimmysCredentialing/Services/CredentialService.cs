@@ -53,6 +53,7 @@ namespace KimmysCredentialing.Services
             exisiting.Name = updatedCredential.Name;
             exisiting.IssueDate = updatedCredential.IssueDate;
             exisiting.ExpirationDate = updatedCredential.ExpirationDate;
+            exisiting.FilePath = updatedCredential.FilePath;
             exisiting.Notes = updatedCredential.Notes;
 
             db.SaveChanges();

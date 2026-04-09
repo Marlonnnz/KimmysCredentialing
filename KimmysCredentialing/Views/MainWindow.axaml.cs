@@ -1,4 +1,8 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
+using KimmysCredentialing.ViewModels;
+using System.Linq;
 
 namespace KimmysCredentialing.Views
 {
@@ -7,6 +11,25 @@ namespace KimmysCredentialing.Views
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public async void BrowseDocument_Click(object? sender, RoutedEventArgs e)
+        {
+            var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                Title = "Select Credential Document",
+                AllowMultiple = false
+            });
+
+            var file = files.FirstOrDefault();
+
+            if (file is null)
+                return;
+
+            if(DataContext is MainWindowViewModel vm)
+            {
+                vm.CredentialFilePath = file.Path.LocalPath;
+            }
         }
     }
 }

@@ -146,6 +146,16 @@
                 <TextBlock Text="Expiration Date"/>
                 <DatePicker SelectedDate="{Binding CredentialExpirationDate}"/>
 
+                
+                <TextBlock Text="Document Path"/>
+                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                    <TextBox Grid.Column="0" 
+                             Text="{Binding CredentialFilePath}"
+                                 Watermark="Enter document path or browse for file"/>
+                    <Button Grid.Column="1"
+                            Content="Browse"
+                            Click="BrowseDocument_Click"/>
+                </Grid>
                 <TextBlock Text="Notes"/>
                 <TextBox Text="{Binding CredentialNotes}"
                          Watermark="Enter notes"
@@ -189,11 +199,16 @@
                                     <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
                                     <TextBlock Text="{Binding IssueDate, StringFormat='Issue: {0:d}'}"/>
                                     <TextBlock Text="{Binding ExpirationDate, StringFormat='Expires: {0:d}'}"/>
+                                    <TextBlock Text="{Binding FilePath, StringFormat='File: {0}'}"/>
                                     <TextBlock Text="{Binding Notes}"/>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
+
+
                     </ListBox.ItemTemplate>
+                    
+                                    
                 </ListBox>
             </StackPanel>
         </ScrollViewer>
