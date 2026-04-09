@@ -3,6 +3,8 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using KimmysCredentialing.ViewModels;
 using System.Linq;
+using System.Diagnostics;
+using System.IO;
 
 namespace KimmysCredentialing.Views
 {
@@ -30,6 +32,26 @@ namespace KimmysCredentialing.Views
             {
                 vm.CredentialFilePath = file.Path.LocalPath;
             }
+        }
+
+        private void OpenDocument_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is not MainWindowViewModel vm)
+                return;
+
+            if (string.IsNullOrWhiteSpace(vm.CredentialFilePath))
+                return;
+
+            if (!File.Exists(vm.CredentialFilePath))
+                return;
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = vm.CredentialFilePath,
+                UseShellExecute = true
+            };
+
+            Process.Start(startInfo);
         }
     }
 }

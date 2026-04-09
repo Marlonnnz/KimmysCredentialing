@@ -175,6 +175,9 @@
                         Command="{Binding DeleteCredentialCommand}"
                         Width="150"
                         Margin="0, 10, 0, 10"/>
+                <Button Content="Open Document"
+                        Click="OpenDocument_Click"
+                        Width="150"/>
 
                 <TextBlock Text="Saved Credentials"
                            FontSize="16"
