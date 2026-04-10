@@ -56,175 +56,216 @@
         </ListBox>
     </StackPanel>
 </Border>
+        
 
-        <Grid Grid.Row="3" ColumnDefinitions="2*,2*,3*" ColumnSpacing="20">
+        <TabControl Grid.Row="3">
+        <TabItem Header="Providers">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Border Padding="15">
+                    <Grid ColumnDefinitions="2*,3*" ColumnSpacing="20">
 
-    <Border Grid.Column="0"
-            BorderBrush="Gray"
-            BorderThickness="1"
-            Padding="15">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel Spacing="10">
-                <TextBlock Text="Add Provider"
-                           FontSize="20"
-                           FontWeight="SemiBold"/>
+                        <Border Grid.Column="0"
+                                BorderBrush="Gray"
+                                BorderThickness="1"
+                                Padding="15">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Add / Edit Provider"
+                                           FontSize="20"
+                                           FontWeight="SemiBold"/>
 
-                <TextBlock Text="Name"/>
-                <TextBox Text="{Binding Name}" Watermark="Enter provider name"/>
+                                <TextBlock Text="Name"/>
+                                <TextBox Text="{Binding Name}" Watermark="Enter provider name"/>
 
-                <TextBlock Text="NPI"/>
-                <TextBox Text="{Binding Npi}" Watermark="Enter NPI"/>
+                                <TextBlock Text="NPI"/>
+                                <TextBox Text="{Binding Npi}" Watermark="Enter NPI"/>
 
-                <TextBlock Text="Specialty"/>
-                <TextBox Text="{Binding Specialty}" Watermark="Enter specialty"/>
+                                <TextBlock Text="Specialty"/>
+                                <TextBox Text="{Binding Specialty}" Watermark="Enter specialty"/>
 
-                <TextBlock Text="Email"/>
-                <TextBox Text="{Binding Email}" Watermark="Enter email"/>
+                                <TextBlock Text="Email"/>
+                                <TextBox Text="{Binding Email}" Watermark="Enter email"/>
 
-                <TextBlock Text="Phone"/>
-                <TextBox Text="{Binding Phone}" Watermark="Enter phone"/>
+                                <TextBlock Text="Phone"/>
+                                <TextBox Text="{Binding Phone}" Watermark="Enter phone"/>
 
-                <Button Content="Add Provider"
-                        Command="{Binding AddProviderCommand}"
-                        Width="140"
-                        Margin="0,10,0,0"/>
-                <Button Content="Update Provider"
-                        Command="{Binding UpdateProviderCommand}"
-                        Width="140" />
-                <Button Content="Delete Selected Provider"
-                        Command="{Binding DeleteProviderCommand}"
-                        Width="180" />
-            </StackPanel>
-        </ScrollViewer>
-    </Border>
+                                <Button Content="Add Provider"
+                                        Command="{Binding AddProviderCommand}"
+                                        Width="140"
+                                        Margin="0,10,0,10"/>
 
-    <Border Grid.Column="1"
-            BorderBrush="Gray"
-            BorderThickness="1"
-            Padding="15">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel Spacing="10">
-                <TextBlock Text="Providers"
-                           FontSize="20"
-                           FontWeight="SemiBold"/>
-                <TextBlock Text="Search Providers" />
-                <TextBox Text="{Binding ProviderSearchText}"
-                         Watermark="Search by Name, NPI, specialty, email or phone" />
-                <ListBox ItemsSource="{Binding Providers}"
-                         SelectedItem="{Binding SelectedProvider}"
-                         Height="500">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="8">
-                                <StackPanel Spacing="4">
-                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding NPI}"/>
-                                    <TextBlock Text="{Binding Specialty}"/>
-                                    <TextBlock Text="{Binding Email}"/>
-                                    <TextBlock Text="{Binding Phone}"/>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
-        </ScrollViewer>
-    </Border>
+                                <Button Content="Update Provider"
+                                        Command="{Binding UpdateProviderCommand}"
+                                        Width="140"
+                                        Margin="0,0,0,10"/>
 
-    <Border Grid.Column="2"
-            BorderBrush="Gray"
-            BorderThickness="1"
-            Padding="15">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel Spacing="10">
-                <TextBlock Text="Credentials"
-                           FontSize="20"
-                           FontWeight="SemiBold"/>
+                                <Button Content="Delete Selected Provider"
+                                        Command="{Binding DeleteProviderCommand}"
+                                        Width="180"/>
+                            </StackPanel>
+                        </Border>
 
-                <TextBlock Text="{Binding SelectedProvider.Name, FallbackValue='Select a provider'}"
-                           FontWeight="Bold"
-                           FontSize="16"/>
+                        <Border Grid.Column="1"
+                                BorderBrush="Gray"
+                                BorderThickness="1"
+                                Padding="15">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Providers"
+                                           FontSize="20"
+                                           FontWeight="SemiBold"/>
 
-                <TextBlock Text="Credential Name"/>
-                <TextBox Text="{Binding CredentialName}" Watermark="Enter credential name"/>
+                                <TextBlock Text="Search Providers"/>
+                                <TextBox Text="{Binding ProviderSearchText}"
+                                         Watermark="Search by name, NPI, specialty, email, or phone"/>
 
-                <TextBlock Text="Issue Date"/>
-                <DatePicker SelectedDate="{Binding CredentialIssueDate}"/>
+                                <ListBox ItemsSource="{Binding Providers}"
+                                         SelectedItem="{Binding SelectedProvider}"
+                                         Height="500">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="LightGray"
+                                                    BorderThickness="0,0,0,1"
+                                                    Padding="8">
+                                                <StackPanel Spacing="4">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding NPI}"/>
+                                                    <TextBlock Text="{Binding Specialty}"/>
+                                                    <TextBlock Text="{Binding Email}"/>
+                                                    <TextBlock Text="{Binding Phone}"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
 
-                <TextBlock Text="Expiration Date"/>
-                <DatePicker SelectedDate="{Binding CredentialExpirationDate}"/>
+                    </Grid>
+                </Border>
+            </ScrollViewer>
+        </TabItem>
 
-                
-                <TextBlock Text="Document Path"/>
-                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
-                    <TextBox Grid.Column="0" 
-                             Text="{Binding CredentialFilePath}"
-                                 Watermark="Enter document path or browse for file"/>
-                    <Button Grid.Column="1"
-                            Content="Browse"
-                            Click="BrowseDocument_Click"/>
-                </Grid>
-                <TextBlock Text="Notes"/>
-                <TextBox Text="{Binding CredentialNotes}"
-                         Watermark="Enter notes"
-                         AcceptsReturn="True"
-                         Height="80"/>
+        <TabItem Header="Credentials">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Border Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Credentials"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"/>
 
-                <Button Content="Add Credential"
-                        Command="{Binding AddCredentialCommand}"
-                        Width="150"
-                        Margin="0,10,0,10"/>
+                        <TextBlock Text="{Binding SelectedProvider.Name, FallbackValue='Select a provider from the Providers tab'}"
+                                   FontWeight="Bold"
+                                   FontSize="16"/>
 
-                <Button Content="Update Credential"
-                        Command="{Binding UpdateCredentialCommand}"
-                        Width="150" />
+                        <TextBlock Text="Credential Name"/>
+                        <TextBox Text="{Binding CredentialName}" Watermark="Enter credential name"/>
 
-                <Button Content="Delete Credential"
-                        Command="{Binding DeleteCredentialCommand}"
-                        Width="150"
-                        Margin="0, 10, 0, 10"/>
-                <Button Content="Open Document"
-                        Click="OpenDocument_Click"
-                        Width="150"/>
+                        <TextBlock Text="Issue Date"/>
+                        <DatePicker SelectedDate="{Binding CredentialIssueDate}"/>
 
-                <TextBlock Text="Saved Credentials"
-                           FontSize="16"
-                           FontWeight="SemiBold"
-                           Margin="0,10,0,0"/>
+                        <TextBlock Text="Expiration Date"/>
+                        <DatePicker SelectedDate="{Binding CredentialExpirationDate}"/>
 
-                <TextBlock Text="Filter by Status"/>
-                <ComboBox ItemsSource="{Binding CredentialStatusFilters}"
-                          SelectedItem="{Binding SelectedCredentialStatusFilter}"
-                          Width="180"/>
+                        <TextBlock Text="Document Path"/>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <TextBox Grid.Column="0"
+                                     Text="{Binding CredentialFilePath}"
+                                     Watermark="Enter document path or browse for file"/>
 
-                <ListBox ItemsSource="{Binding Credentials}"
-                         SelectedItem ="{Binding SelectedCredential}"
-                         Height="300">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="LightGray"
-                                    BorderThickness="0,0,0,1"
-                                    Padding="8">
-                                <StackPanel Spacing="4">
-                                    <TextBlock Text="{Binding Status}" FontWeight="Bold" />
-                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding IssueDate, StringFormat='Issue: {0:d}'}"/>
-                                    <TextBlock Text="{Binding ExpirationDate, StringFormat='Expires: {0:d}'}"/>
-                                    <TextBlock Text="{Binding FilePath, StringFormat='File: {0}'}"/>
-                                    <TextBlock Text="{Binding Notes}"/>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
+                            <Button Grid.Column="1"
+                                    Content="Browse"
+                                    Click="BrowseDocument_Click"/>
+                        </Grid>
 
+                        <TextBlock Text="Notes"/>
+                        <TextBox Text="{Binding CredentialNotes}"
+                                 Watermark="Enter notes"
+                                 AcceptsReturn="True"
+                                 Height="80"/>
 
-                    </ListBox.ItemTemplate>
-                    
-                                    
-                </ListBox>
-            </StackPanel>
-        </ScrollViewer>
-    </Border>
+                        <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,10">
+                            <Button Content="Add Credential"
+                                    Command="{Binding AddCredentialCommand}"
+                                    Width="150"/>
 
+                            <Button Content="Update Credential"
+                                    Command="{Binding UpdateCredentialCommand}"
+                                    Width="150"/>
+
+                            <Button Content="Delete Selected Credential"
+                                    Command="{Binding DeleteCredentialCommand}"
+                                    Width="190"/>
+
+                            <Button Content="Open Document"
+                                    Click="OpenDocument_Click"
+                                    Width="150"/>
+                        </StackPanel>
+
+                        <TextBlock Text="Saved Credentials"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Margin="0,10,0,0"/>
+
+                        <TextBlock Text="Filter by Status"/>
+                        <ComboBox ItemsSource="{Binding CredentialStatusFilters}"
+                                  SelectedItem="{Binding SelectedCredentialStatusFilter}"
+                                  Width="180"/>
+
+                        <ListBox ItemsSource="{Binding Credentials}"
+                                 SelectedItem="{Binding SelectedCredential}"
+                                 Height="350">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="LightGray"
+                                            BorderThickness="0,0,0,1"
+                                            Padding="8">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding Status}" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding IssueDate, StringFormat='Issue: {0:d}'}"/>
+                                            <TextBlock Text="{Binding ExpirationDate, StringFormat='Expires: {0:d}'}"/>
+                                            <TextBlock Text="{Binding FilePath, StringFormat='File: {0}'}"/>
+                                            <TextBlock Text="{Binding Notes}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="Alerts">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Border Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Expiring in the Next 30 Days"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"/>
+
+                        <ListBox ItemsSource="{Binding ExpiringSoonCredentials}"
+                                 Height="500">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="LightGray"
+                                            BorderThickness="0,0,0,1"
+                                            Padding="8">
+                                        <StackPanel Orientation="Horizontal" Spacing="12">
+                                            <TextBlock Text="{Binding ProviderDisplayName}" FontWeight="Bold"/>
+                                            <TextBlock Text=" - "/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                            <TextBlock Text="{Binding ExpirationDate, StringFormat='Expires: {0:d}'}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+        </TabItem>
+    </TabControl>
 </Grid>
-    </Grid>
+
+
 </Window>
