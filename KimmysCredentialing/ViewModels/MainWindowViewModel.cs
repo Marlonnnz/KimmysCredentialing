@@ -63,6 +63,12 @@ namespace KimmysCredentialing.ViewModels;
         [ObservableProperty]
         private DateTimeOffset? credentialExpirationDate;
 
+        [ObservableProperty]
+        private string statusMessage = string.Empty;
+
+        [ObservableProperty]
+        private bool isError;
+
         public ObservableCollection<Credential> ExpiringSoonCredentials { get; } = new();
 
         [ObservableProperty]
@@ -120,8 +126,11 @@ namespace KimmysCredentialing.ViewModels;
         [RelayCommand]
         private void AddProvider()
         {
-            if(string.IsNullOrWhiteSpace(Name))
-                return;
+        if (string.IsNullOrWhiteSpace(Name))
+        {
+            ShowError("Provider name is required");
+            return;
+        }
 
             var provider = new Provider
             {
@@ -137,12 +146,22 @@ namespace KimmysCredentialing.ViewModels;
             ClearForm();
             LoadProviders();
             LoadExpiringSoonCredentials();
+            ShowSuccess("Provider added successfully");
     }
         [RelayCommand]
         private void UpdateProvider()
         {
-            if (SelectedProvider is null)
-                return;
+        if (SelectedProvider is null)
+        {
+            ShowError("Select a provider to update");
+            return;
+        }
+
+        if(string.IsNullOrWhiteSpace(Name))
+        {
+            ShowError("Provider name is required");
+            return;
+        }
 
             SelectedProvider.Name = Name;
             SelectedProvider.NPI = Npi;
@@ -154,12 +173,16 @@ namespace KimmysCredentialing.ViewModels;
 
             LoadProviders();
             LoadExpiringSoonCredentials();
+            ShowSuccess("Provider updated successfully");
         }
         [RelayCommand]
         private void DeleteProvider()
         {
-            if (SelectedProvider is null)
-                return;
+        if (SelectedProvider is null)
+        {
+            ShowError("Select a provider to delete");
+            return;
+        }
 
             _providerService.DeleteProvider(SelectedProvider.ProviderId);
 
@@ -169,16 +192,23 @@ namespace KimmysCredentialing.ViewModels;
             Credentials.Clear();
             LoadProviders();
             LoadExpiringSoonCredentials();
+            ShowSuccess("Provider deleted successfully");
         }
 
         [RelayCommand]
         private void AddCredential()
         {
             if (SelectedProvider is null)
+            {
+                ShowError("Select a provider before adding a credential");
                 return;
+            }
 
             if (string.IsNullOrWhiteSpace(CredentialName))
+            {
+                ShowError("Provider name is required");
                 return;
+            }
 
             var credential = new Credential
             {
@@ -193,13 +223,22 @@ namespace KimmysCredentialing.ViewModels;
             _credentialService.AddCredential(credential);
             ClearCredentialForm();
             LoadCredentials();
+            ShowSuccess("Credential added successfully");
         }
         [RelayCommand]
         private void UpdateCredential()
         {
             if (SelectedCredential is null)
+            {
+                ShowError("Select a credential to update");
                 return;
+            }
 
+            if(string.IsNullOrWhiteSpace(CredentialName))
+            {
+                ShowError("Credential requires a name");
+                return;
+            }
             SelectedCredential.Name = CredentialName;
             SelectedCredential.IssueDate = CredentialIssueDate?.DateTime;
             SelectedCredential.ExpirationDate = CredentialExpirationDate?.DateTime;
@@ -210,18 +249,23 @@ namespace KimmysCredentialing.ViewModels;
 
             LoadCredentials();
             LoadExpiringSoonCredentials();
+            ShowSuccess("Credential updated successfully");
         }
 
         [RelayCommand]    
         private void DeleteCredential()
     {
         if (selectedCredential is null)
+        {
+            ShowError("Select a credential to delete");
             return;
+        }
 
         _credentialService.DeleteCredential(selectedCredential.CredentialId);
         selectedCredential = null;
         LoadCredentials();
         LoadExpiringSoonCredentials();
+        ShowSuccess("Credential deleted successfully");
     }
 
         private void LoadProviders()
@@ -314,5 +358,17 @@ namespace KimmysCredentialing.ViewModels;
             }
         }
     }
+
+        private void ShowSuccess(string message)
+        {
+            StatusMessage = message;
+            isError = false;
+        }
+
+        private void ShowError(string message)
+        {
+            StatusMessage = message;
+            isError = true;
+        }
     }
 
