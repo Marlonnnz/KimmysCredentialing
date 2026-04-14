@@ -58,8 +58,63 @@
     </StackPanel>
 </Border>
         
+        
 
         <TabControl Grid.Row="3">
+            <TabItem Header="Dashboard">
+			<ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Border Padding="15">
+					<StackPanel Spacing="20">
+						<TextBlock Text="Dashboard Summary"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"/>
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="20">
+							<Border Grid.Column="0"
+                                    BorderBrush="Gray"
+                                    BorderThickness="1"
+                                    Padding="20">
+                                <StackPanel Spacing="8">
+									<TextBlock Text="Total Providers"
+                                               FontSize="18"
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding TotalProviders}"
+                                               FontSize="28"
+                                               FontWeight="Bold"/>
+                                </StackPanel>
+                            </Border>
+
+                             <Border Grid.Column="1"
+                            BorderBrush="Gray"
+                            BorderThickness="1"
+                            Padding="20">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Total Credentials"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding TotalCredentials}"
+                                       FontSize="28"
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2"
+                            BorderBrush="Gray"
+                            BorderThickness="1"
+                            Padding="20">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Expiring Soon"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding ExpiringSoonCount}"
+                                       FontSize="28"
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                </ScrollViewer>
+        </TabItem>
         <TabItem Header="Providers">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Border Padding="15">

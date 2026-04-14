@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KimmysCredentialing.Models;
 using KimmysCredentialing.Services;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KimmysCredentialing.ViewModels;
 
@@ -34,7 +35,16 @@ namespace KimmysCredentialing.ViewModels;
         private Provider? selectedProvider;
 
         [ObservableProperty]
+        private int totalProviders;
+
+        [ObservableProperty]
         private Credential? selectedCredential;
+
+        [ObservableProperty]
+        private int totalCredentials;
+
+        [ObservableProperty]
+        private int expiringSoonCount;
 
         [ObservableProperty]
         private string credentialName = string.Empty;
@@ -86,6 +96,7 @@ namespace KimmysCredentialing.ViewModels;
 
             LoadProviders();
             LoadExpiringSoonCredentials();
+            LoadDashboardSummary();
     }
 
         partial void OnSelectedProviderChanged(Provider? value)
@@ -119,11 +130,13 @@ namespace KimmysCredentialing.ViewModels;
         partial void OnSelectedCredentialStatusFilterChanged(string value)
         {
             LoadCredentials();
-        }
+            LoadDashboardSummary();
+    }
         partial void OnProviderSearchTextChanged(string value)
         {
             LoadProviders();
-        }
+            LoadDashboardSummary();
+    }
 
         [RelayCommand]
         private void AddProvider()
@@ -175,6 +188,7 @@ namespace KimmysCredentialing.ViewModels;
 
             LoadProviders();
             LoadExpiringSoonCredentials();
+            LoadDashboardSummary();
             ShowSuccess("Provider updated successfully");
         }
         [RelayCommand]
@@ -194,6 +208,7 @@ namespace KimmysCredentialing.ViewModels;
             Credentials.Clear();
             LoadProviders();
             LoadExpiringSoonCredentials();
+            LoadDashboardSummary();
             ShowSuccess("Provider deleted successfully");
         }
 
@@ -225,6 +240,7 @@ namespace KimmysCredentialing.ViewModels;
             _credentialService.AddCredential(credential);
             ClearCredentialForm();
             LoadCredentials();
+            LoadDashboardSummary();
             ShowSuccess("Credential added successfully");
         }
         [RelayCommand]
@@ -251,6 +267,7 @@ namespace KimmysCredentialing.ViewModels;
 
             LoadCredentials();
             LoadExpiringSoonCredentials();
+            LoadDashboardSummary();
             ShowSuccess("Credential updated successfully");
         }
 
@@ -267,6 +284,7 @@ namespace KimmysCredentialing.ViewModels;
         selectedCredential = null;
         LoadCredentials();
         LoadExpiringSoonCredentials();
+        LoadDashboardSummary();
         ShowSuccess("Credential deleted successfully");
     }
 
@@ -371,6 +389,37 @@ namespace KimmysCredentialing.ViewModels;
         {
             StatusMessage = message;
             isError = true;
+        }
+
+        private void LoadDashboardSummary()
+        {
+            TotalProviders = Providers.Count;
+
+            int credentialCount = 0;
+            int expiringSoonCount = 0;
+
+            var today = DateTime.Today;
+            var soon = today.AddDays(30);
+
+            foreach (var provider in Providers)
+            {
+                var credentials = _credentialService.GetCredentialsByProviderId(provider.ProviderId);
+
+                credentialCount += credentials.Count;
+
+                foreach (var credential in credentials)
+                {
+                    if(credential.ExpirationDate.HasValue &&
+                        credential.ExpirationDate.Value.Date >= today &&
+                        credential.ExpirationDate.Value.Date <= soon)
+                    {
+                        expiringSoonCount++;
+                    }
+                }
+            }
+
+        TotalCredentials = credentialCount;
+        ExpiringSoonCount = expiringSoonCount;
         }
     }
 
