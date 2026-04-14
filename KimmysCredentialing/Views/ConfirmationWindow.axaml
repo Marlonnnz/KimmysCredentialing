@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="KimmysCredentialing.Views.ConfirmationWindow"
+        Title="Confirm Delete"
+        Width="350"
+        Height="170"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+
+    <StackPanel Margin="20" Spacing="20">
+        <TextBlock x:Name="MessageText"
+                   Text="Are you sure?"
+                   TextWrapping="Wrap"
+                   FontSize="16"/>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="15">
+            <Button Content="Yes"
+                    Width="100"
+                    Click="Yes_Click"/>
+
+            <Button Content="No"
+                    Width="100"
+                    Click="No_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

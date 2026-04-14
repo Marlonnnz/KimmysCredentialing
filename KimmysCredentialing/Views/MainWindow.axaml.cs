@@ -53,5 +53,52 @@ namespace KimmysCredentialing.Views
 
             Process.Start(startInfo);
         }
+
+        private async void DeleteProvider_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is not MainWindowViewModel vm)
+                return;
+
+            if(vm.SelectedProvider is null)
+            {
+                vm.StatusMessage = "Select a provider to delete.";
+                vm.IsError = true;
+                return;
+            }
+
+            var dialog = new ConfirmationWindow(
+                $"Are you sure you want to delete provider '{vm.SelectedProvider.Name}'?");
+
+            await dialog.ShowDialog(this);
+
+            if(dialog.Confirmed)
+            {
+                vm.DeleteProviderCommand.Execute(null);
+            }
+        }
+
+        private async void DeleteCredential_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is not MainWindowViewModel vm)
+                return;
+
+            if (vm.SelectedCredential is null)
+            {
+                vm.StatusMessage = "Select a credential to delete.";
+                vm.IsError = true;
+                return;
+            }
+
+            var dialog = new ConfirmationWindow(
+                $"Are you sure you want to delete credential '{vm.SelectedCredential.Name}'?"
+            );
+
+            await dialog.ShowDialog(this);
+
+            if (dialog.Confirmed)
+            {
+                vm.DeleteCredentialCommand.Execute(null);
+            }
+        }
     }
 }
