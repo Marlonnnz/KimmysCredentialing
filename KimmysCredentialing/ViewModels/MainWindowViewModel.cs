@@ -69,6 +69,8 @@ namespace KimmysCredentialing.ViewModels;
         [ObservableProperty]
         private bool isError;
 
+        public string StatusColor => IsError ? "Green" : "Red";
+
         public ObservableCollection<Credential> ExpiringSoonCredentials { get; } = new();
 
         [ObservableProperty]
