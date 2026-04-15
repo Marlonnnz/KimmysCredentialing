@@ -3,6 +3,7 @@ using System.Linq;
 using Avalonia.Controls.Platform;
 using KimmysCredentialing.Data;
 using KimmysCredentialing.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace KimmysCredentialing.Services;
 
@@ -15,6 +16,16 @@ public class ProviderService
             .OrderBy( p => p.Name)
             .ToList();
 
+    }
+
+    public List<Provider> GetAllProvidersWithCredentials()
+    {
+        using var db = new AppDbContext();
+
+        return db.Providers
+            .Include(p => p.Credentials)
+            .OrderBy(p => p.Name)
+            .ToList();
     }
 
     public void AddProvider(Provider provider)

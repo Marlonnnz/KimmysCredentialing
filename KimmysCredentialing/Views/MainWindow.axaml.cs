@@ -5,6 +5,11 @@ using KimmysCredentialing.ViewModels;
 using System.Linq;
 using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
+using KimmysCredentialing.Models;
+using KimmysCredentialing.Services;
+using System.Linq.Expressions;
+using System;
 
 namespace KimmysCredentialing.Views
 {
@@ -98,6 +103,53 @@ namespace KimmysCredentialing.Views
             if (dialog.Confirmed)
             {
                 vm.DeleteCredentialCommand.Execute(null);
+            }
+        }
+        
+        private async void ExportBackup_Click(object? sender, RoutedEventArgs e)
+        {
+            var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                Title = "Export Backup",
+                SuggestedFileName = "kimmys-credentialing-backup.json",
+                DefaultExtension = "json"
+            });
+
+            if (file is null)
+                return;
+
+            try
+            {
+                var providerService = new ProviderService();
+                var providers = providerService.GetAllProvidersWithCredentials();
+
+                var backup = new AppBackup
+                {
+                    Providers = providers
+                };
+
+                var json = JsonSerializer.Serialize(backup, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+
+
+
+                await File.WriteAllTextAsync(file.Path.LocalPath, json);
+
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    vm.StatusMessage = "Backup exported successfully";
+                    vm.IsError = false;
+                }
+            }
+            catch(Exception ex)
+            {
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    vm.StatusMessage = $"Failed to export backup: {ex.Message}.";
+                    vm.IsError = true;
+                }
             }
         }
     }

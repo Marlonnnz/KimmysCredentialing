@@ -111,6 +111,10 @@
                         </StackPanel>
                     </Border>
                         </Grid>
+                        <Button Content="Export Backup"
+                                    Width="160"
+                                    Margin="0,20,0,0"
+                                    Click="ExportBackup_Click"/>
                     </StackPanel>
                 </Border>
                 </ScrollViewer>

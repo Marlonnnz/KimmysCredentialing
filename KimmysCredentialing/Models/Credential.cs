@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace KimmysCredentialing.Models
 {
@@ -14,6 +15,7 @@ namespace KimmysCredentialing.Models
         public DateTime? ExpirationDate { get; set; }
         public string FilePath { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
+        [JsonIgnore]
         public Provider? Provider { get; set; }
         public string ProviderDisplayName => Provider?.Name ?? "Unkown Provider";
 
