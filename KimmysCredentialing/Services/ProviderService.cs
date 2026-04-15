@@ -65,4 +65,29 @@ public class ProviderService
         db.Providers.Remove(provider);
         db.SaveChanges();
     }
+
+    public void RestoreBackup(List<Provider> providers)
+    {
+        using var db = new AppDbContext();
+
+        db.Credentials.RemoveRange(db.Credentials);
+        db.Providers.RemoveRange(db.Providers);
+        db.SaveChanges();
+
+        foreach(var provider in  providers)
+        {
+            provider.ProviderId = 0;
+
+            foreach (var credential in provider.Credentials)
+            {
+                credential.CredentialId = 0;
+                credential.Provider = null;
+            }
+        }
+
+        db.Providers.AddRange(providers);
+        db.SaveChanges();
+    }
 }
+
+    

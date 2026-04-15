@@ -421,5 +421,20 @@ namespace KimmysCredentialing.ViewModels;
         TotalCredentials = credentialCount;
         ExpiringSoonCount = expiringSoonCount;
         }
+
+        public void RefreshAllData()
+        {
+            SelectedProvider = null;
+            SelectedCredential = null;
+
+            ClearForm();
+            ClearCredentialForm();
+
+
+            LoadProviders();
+            LoadCredentials();
+            LoadExpiringSoonCredentials();
+            LoadDashboardSummary();
+        }
     }
 

@@ -152,5 +152,60 @@ namespace KimmysCredentialing.Views
                 }
             }
         }
+
+        private async void ImportBackup_Click(object? sender, RoutedEventArgs e)
+        {
+            var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                Title = "Import Backup",
+                AllowMultiple = false
+            });
+
+            var file = files.FirstOrDefault();
+
+            if (file is null)
+                return;
+
+            try
+            {
+                string json;
+
+                await using (var stream = await file.OpenReadAsync())
+                    using (var reader = new StreamReader(stream))
+                {
+                    json = await reader.ReadToEndAsync();
+                }
+
+                var backup = JsonSerializer.Deserialize<AppBackup>(json);
+
+                if(backup is null)
+                {
+                    if (DataContext is MainWindowViewModel vmNull)
+                    {
+                        vmNull.StatusMessage = "Backup file was empty or invalid.";
+                        vmNull.IsError = true;
+                    }
+                    return;
+                }
+
+                var providerService = new ProviderService();
+                providerService.RestoreBackup(backup.Providers);
+
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    vm.RefreshAllData();
+                    vm.StatusMessage = "Backup imported successfully.";
+                    vm.IsError = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    vm.StatusMessage = $"Failed to import backup: {ex.Message}";
+                    vm.IsError = true;
+                }
+            }
+        }
     }
 }

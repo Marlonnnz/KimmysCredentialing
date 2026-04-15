@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KimmysCredentialing")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b3d3cb07dd4fb08036973ffdcf2e160df5702f53")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+622313692faeaaacd7b77fe2deff400dd3ef5d17")]
 [assembly: System.Reflection.AssemblyProductAttribute("KimmysCredentialing")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KimmysCredentialing")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
