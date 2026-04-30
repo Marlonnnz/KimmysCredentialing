@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KimmysCredentialing.Services
 {
-    public class CredentialService
+    public class CredentialService : ICredentialService
     {
         public List<Credential> GetCredentialsByProviderId(int providerId)
         {

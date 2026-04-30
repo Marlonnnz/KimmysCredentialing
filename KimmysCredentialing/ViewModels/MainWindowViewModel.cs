@@ -13,8 +13,8 @@ namespace KimmysCredentialing.ViewModels;
 
     public partial class MainWindowViewModel : ViewModelBase
     {
-        private readonly ProviderService _providerService;
-        private readonly CredentialService _credentialService;
+        private readonly IProviderService _providerService;
+        private readonly ICredentialService _credentialService;
 
         [ObservableProperty]
         private string name = string.Empty;
@@ -94,7 +94,7 @@ namespace KimmysCredentialing.ViewModels;
 
         }
 
-        public MainWindowViewModel(ProviderService providerService, CredentialService credentialService, bool loadData = true)
+        public MainWindowViewModel(IProviderService providerService, ICredentialService credentialService, bool loadData = true)
         {
             _providerService = providerService;
             _credentialService = credentialService;
@@ -169,7 +169,7 @@ namespace KimmysCredentialing.ViewModels;
             ClearForm();
             LoadProviders();
             LoadExpiringSoonCredentials();
-            ShowSuccess("Provider added successfully");
+            ShowSuccess("Provider added successfully.");
     }
         [RelayCommand]
         private void UpdateProvider()
@@ -182,7 +182,7 @@ namespace KimmysCredentialing.ViewModels;
 
         if(string.IsNullOrWhiteSpace(Name))
         {
-            ShowError("Provider name is required");
+            ShowError("Provider name is required.");
             return;
         }
 
@@ -197,7 +197,7 @@ namespace KimmysCredentialing.ViewModels;
             LoadProviders();
             LoadExpiringSoonCredentials();
             LoadDashboardSummary();
-            ShowSuccess("Provider updated successfully");
+            ShowSuccess("Provider updated successfully.");
         }
         [RelayCommand]
         private void DeleteProvider()
@@ -217,7 +217,7 @@ namespace KimmysCredentialing.ViewModels;
             LoadProviders();
             LoadExpiringSoonCredentials();
             LoadDashboardSummary();
-            ShowSuccess("Provider deleted successfully");
+            ShowSuccess("Provider deleted successfully.");
         }
 
         [RelayCommand]

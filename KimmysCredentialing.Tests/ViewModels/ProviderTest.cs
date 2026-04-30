@@ -5,6 +5,7 @@ using KimmysCredentialing.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using KimmysCredentialing.Tests.Fakes;
 
 namespace KimmysCredentialing.Tests.ViewModels
 {
@@ -78,6 +79,26 @@ namespace KimmysCredentialing.Tests.ViewModels
 
             Assert.Equal("Select a provider to delete.", vm.StatusMessage);
             Assert.True(vm.IsError);
+        }
+
+        [Fact]
+        public void AddProvider_WithValidName_CallsProviderService_AndShowsSuccessMessage()
+        {
+            var providerService = new FakeProviderService();
+            var credentialService = new FakeCredentialService();
+            var vm = new MainWindowViewModel(providerService, credentialService, false);
+
+            vm.Name = "Test";
+            vm.Npi = "123456789";
+            vm.Specialty = "Ortho";
+
+            vm.AddProviderCommand.Execute(null);
+
+            Assert.True(providerService.AddProviderWasCalled);
+            Assert.Single(providerService.Providers);
+            Assert.Equal("Test", providerService.Providers[0].Name);
+            Assert.Equal("Provider added successfully.", vm.StatusMessage);
+            Assert.False(vm.IsError);
         }
     }
 }
