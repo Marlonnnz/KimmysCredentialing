@@ -91,13 +91,21 @@ namespace KimmysCredentialing.ViewModels;
 
         public MainWindowViewModel()
         {
-            _providerService = new ProviderService();
-            _credentialService = new CredentialService();
 
-            LoadProviders();
-            LoadExpiringSoonCredentials();
-            LoadDashboardSummary();
-    }
+        }
+
+        public MainWindowViewModel(ProviderService providerService, CredentialService credentialService, bool loadData = true)
+        {
+            _providerService = providerService;
+            _credentialService = credentialService;
+
+            if (loadData)
+            {
+                LoadProviders();
+                LoadExpiringSoonCredentials();
+                LoadDashboardSummary();
+            }
+        }
 
         partial void OnSelectedProviderChanged(Provider? value)
         {
@@ -143,7 +151,7 @@ namespace KimmysCredentialing.ViewModels;
         {
         if (string.IsNullOrWhiteSpace(Name))
         {
-            ShowError("Provider name is required");
+            ShowError("Provider name is required.");
             return;
         }
 
@@ -168,7 +176,7 @@ namespace KimmysCredentialing.ViewModels;
         {
         if (SelectedProvider is null)
         {
-            ShowError("Select a provider to update");
+            ShowError("Select a provider to update.");
             return;
         }
 
@@ -196,7 +204,7 @@ namespace KimmysCredentialing.ViewModels;
         {
         if (SelectedProvider is null)
         {
-            ShowError("Select a provider to delete");
+            ShowError("Select a provider to delete.");
             return;
         }
 
@@ -217,7 +225,7 @@ namespace KimmysCredentialing.ViewModels;
         {
             if (SelectedProvider is null)
             {
-                ShowError("Select a provider before adding a credential");
+                ShowError("Select a provider before adding a credential.");
                 return;
             }
 
@@ -276,7 +284,7 @@ namespace KimmysCredentialing.ViewModels;
     {
         if (selectedCredential is null)
         {
-            ShowError("Select a credential to delete");
+            ShowError("Select a credential to delete.");
             return;
         }
 
