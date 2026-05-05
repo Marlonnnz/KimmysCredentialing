@@ -121,6 +121,10 @@
                             <Button Content="Import Backup"
                                     Width="160"
                                     Click="ImportBackup_Click"/>
+
+                            <Button Content="Export CSV Report"
+                                    Width="180"
+                                    Click="ExportCsvReport_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

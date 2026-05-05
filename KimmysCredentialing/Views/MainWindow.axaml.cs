@@ -9,7 +9,9 @@ using System.Text.Json;
 using KimmysCredentialing.Models;
 using KimmysCredentialing.Services;
 using System.Linq.Expressions;
-using System; 
+using System;
+using System.Text;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace KimmysCredentialing.Views
 {
@@ -33,7 +35,7 @@ namespace KimmysCredentialing.Views
             if (file is null)
                 return;
 
-            if(DataContext is MainWindowViewModel vm)
+            if (DataContext is MainWindowViewModel vm)
             {
                 vm.CredentialFilePath = file.Path.LocalPath;
             }
@@ -64,7 +66,7 @@ namespace KimmysCredentialing.Views
             if (DataContext is not MainWindowViewModel vm)
                 return;
 
-            if(vm.SelectedProvider is null)
+            if (vm.SelectedProvider is null)
             {
                 vm.StatusMessage = "Select a provider to delete.";
                 vm.IsError = true;
@@ -76,7 +78,7 @@ namespace KimmysCredentialing.Views
 
             await dialog.ShowDialog(this);
 
-            if(dialog.Confirmed)
+            if (dialog.Confirmed)
             {
                 vm.DeleteProviderCommand.Execute(null);
             }
@@ -105,7 +107,7 @@ namespace KimmysCredentialing.Views
                 vm.DeleteCredentialCommand.Execute(null);
             }
         }
-        
+
         private async void ExportBackup_Click(object? sender, RoutedEventArgs e)
         {
             var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
@@ -143,7 +145,7 @@ namespace KimmysCredentialing.Views
                     vm.IsError = false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (DataContext is MainWindowViewModel vm)
                 {
@@ -171,14 +173,14 @@ namespace KimmysCredentialing.Views
                 string json;
 
                 await using (var stream = await file.OpenReadAsync())
-                    using (var reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     json = await reader.ReadToEndAsync();
                 }
 
                 var backup = JsonSerializer.Deserialize<AppBackup>(json);
 
-                if(backup is null)
+                if (backup is null)
                 {
                     if (DataContext is MainWindowViewModel vmNull)
                     {
@@ -207,5 +209,78 @@ namespace KimmysCredentialing.Views
                 }
             }
         }
+
+        private async void ExportCsvReport_Click(object? sender, RoutedEventArgs e)
+        {
+            var file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                Title = "Export CSV Report",
+                SuggestedFileName = "kimmys-credentialing-report.csv",
+                DefaultExtension = "csv"
+            });
+
+            if (file is null)
+                return;
+
+            try
+            {
+                var providerService = new ProviderService();
+                var providers = providerService.GetAllProvidersWithCredentials();
+
+                var csv = new StringBuilder();
+
+                csv.AppendLine("Provider Name,NPI,Specialty, Email, Phone, Credential Name,Issue Date, Expiration Date, Status,Document, Path Notes");
+
+                foreach ( var provider in providers)
+                {
+                    foreach ( var credential in provider.Credentials)
+                    {
+                        csv.AppendLine(string.Join(",",
+                            EscapeCsv(provider.Name),
+                            EscapeCsv(provider.NPI),
+                            EscapeCsv(provider.Specialty),
+                            EscapeCsv(provider.Email),
+                            EscapeCsv(provider.Phone),
+                            EscapeCsv(credential.Name),
+                            EscapeCsv(credential.IssueDate?.ToShortDateString() ?? ""),
+                            EscapeCsv(credential.ExpirationDate?.ToShortDateString() ?? ""),
+                            EscapeCsv(credential.Status),
+                            EscapeCsv(credential.FilePath),
+                            EscapeCsv(credential.Notes)));
+                    }
+                }
+
+                await using var stream = await file.OpenWriteAsync();
+                using var writer = new StreamWriter(stream);
+                await writer.WriteAsync(csv.ToString());
+
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    vm.StatusMessage = "CSV report exported successfully";
+                    vm.IsError = false;
+                }
+
+            }catch(Exception ex)
+            {
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    vm.StatusMessage = $"Failed to export CSV report: {ex.Message}";
+                    vm.IsError= true;
+                }
+            }
+        }
+
+        private static string EscapeCsv(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return "";
+
+            if (value.Contains(",") || value.Contains("\"") || value.Contains("\n"))
+            {
+                value = value.Replace("\"", "\"\"");
+                return $"\"{value}\"";
+            }
+
+            return value ;
+        } 
     }
 }

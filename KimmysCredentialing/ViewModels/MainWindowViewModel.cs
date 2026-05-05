@@ -231,7 +231,7 @@ namespace KimmysCredentialing.ViewModels;
 
             if (string.IsNullOrWhiteSpace(CredentialName))
             {
-                ShowError("Provider name is required");
+                ShowError("Provider name is required.");
                 return;
             }
 
@@ -249,7 +249,7 @@ namespace KimmysCredentialing.ViewModels;
             ClearCredentialForm();
             LoadCredentials();
             LoadDashboardSummary();
-            ShowSuccess("Credential added successfully");
+            ShowSuccess("Credential added successfully.");
         }
         [RelayCommand]
         private void UpdateCredential()
