@@ -88,7 +88,7 @@ namespace KimmysCredentialing.ViewModels;
 
         public ObservableCollection<Provider> Providers {get;} = new();
         public ObservableCollection<Credential> Credentials { get; } = new();
-
+        
         public MainWindowViewModel()
         {
 
@@ -128,8 +128,12 @@ namespace KimmysCredentialing.ViewModels;
 
             CredentialName = value.Name;
             CredentialIssueDate = value.IssueDate.HasValue
-                ? new DateTimeOffset(value.ExpirationDate.Value)
+                ? new DateTimeOffset(value.IssueDate.Value)
                 : null;
+        CredentialExpirationDate = value.ExpirationDate.HasValue
+            ? new DateTimeOffset(value.ExpirationDate.Value) :
+            null;
+
             CredentialFilePath = value.FilePath;
 
             CredentialNotes = value.Notes;

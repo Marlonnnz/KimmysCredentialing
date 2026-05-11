@@ -11,6 +11,8 @@ namespace KimmysCredentialing.Data
         public DbSet<Provider> Providers => Set<Provider>();
         public DbSet<Credential> Credentials => Set<Credential>();
 
+        public DbSet<Office> Offices => Set<Office>();
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=credentialing.db");
